@@ -1,0 +1,25 @@
+{
+    "playerInfo": {
+      "playerId": "76561198356628789",
+      "playerName": "PLOXAN",
+      "avatar": "/api/static/avatars/76561198356628789.jpg",
+      "rank": 1411,
+      "countryRank": 28,
+      "pp": 10640.7,
+      "country": "SE",
+      "role": null,
+      "badges": [],
+      "history": "1404,1405,1403,1403,1405,1409,1410,1412,1413,1419,1424,1426,1427,1432,1423,1424,1426,1430,1433,1431,1378,1385,1390,1382,1381,1379,1382,1373,1375,1382,1385,1389,1396,1371,1373,1376,1377,1380,1383,1385,1388,1389,1391,1391,1395,1403,1406,1410,1412",
+      "permissions": 0,
+      "inactive": 0,
+      "banned": 0
+    },
+    "scoreStats": {
+      "totalScore": 670717481,
+      "totalRankedScore": 531455949,
+      "averageRankedAccuracy": 90.47346775462546,
+      "totalPlayCount": 814,
+      "rankedPlayCount": 534
+    }
+  }
+  
