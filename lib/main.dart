@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:testing/class/user_class.dart';
+import 'package:testing/data/user_data.dart';
+import 'package:testing/asd.dart';
 
 ///import 'package:shared_preferences/shared_preferences.dart';
 //files
@@ -6,6 +9,7 @@ import 'package:testing/leaderboard.dart';
 import 'package:testing/new.page.dart';
 import 'package:testing/settings.dart';
 import 'package:testing/profile.dart';
+import 'package:testing/contry.dart';
 
 void main() => runApp(MyApp());
 
@@ -18,7 +22,7 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: Text('main'),
         ),
-        body: const MyCustomForm(),
+        body: MyCustomForm(),
       ),
     );
   }
@@ -53,86 +57,117 @@ class MyCustomForm extends StatelessWidget {
   }
 }
 
-class NavDrawer extends StatelessWidget {
+class NavDrawer extends StatefulWidget {
+  @override
+  _NavDrawerState createState() => _NavDrawerState();
+}
+
+class _NavDrawerState extends State<NavDrawer> {
+  late Future<UserInfo> futureData;
+
+  @override
+  void initState() {
+    futureData = fetchData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.yellow,
-            ),
-            child: Stack(
-              children: const <Widget>[
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: CircleAvatar(
-                    backgroundImage: NetworkImage(
-                        'https://variety.com/wp-content/uploads/2020/12/Dwayne_Johnson.png?w=970'),
-                    backgroundColor: Colors.white,
-                    radius: 50.0,
+    return FutureBuilder<UserInfo>(
+      future: futureData,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Drawer(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                DrawerHeader(
+                  decoration: BoxDecoration(
+                    color: Colors.yellow,
+                  ),
+                  child: Stack(
+                    children: <Widget>[
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: CircleAvatar(
+                          backgroundImage: NetworkImage(
+                              'https://new.scoresaber.com${snapshot.data!.avatar}'),
+                          backgroundColor: Colors.white,
+                          radius: 50.0,
+                        ),
+                      ),
+                      Align(
+                          alignment: Alignment(0.5, 0),
+                          child: Text('${snapshot.data!.playerName}',
+                              style: TextStyle(
+                                  color: Colors.black, fontSize: 20.0))),
+                      Align(
+                        alignment: Alignment(0.2, 0.4),
+                        child: Text('PP: ${snapshot.data!.pp}',
+                            style: TextStyle(color: Colors.blue)),
+                      ),
+                    ],
                   ),
                 ),
-                Align(
-                    alignment: Alignment(0.5, 0),
-                    child: Text('Username',
-                        style: TextStyle(color: Colors.black, fontSize: 20.0))),
-                Align(
-                  alignment: Alignment(0.2, 0.4),
-                  child: Text('PP: ', style: TextStyle(color: Colors.blue)),
+                ListTile(
+                  leading: Icon(Icons.home),
+                  title: Text('Home'),
+                  onTap: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => MySSID()),
+                    )
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.person),
+                  title: Text('Profile'),
+                  onTap: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ProfilePage()),
+                    ),
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.leaderboard),
+                  title: Text('Leaderboard'),
+                  onTap: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AllCountries()),
+                    )
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.flag),
+                  title: Text('Contry'),
+                  onTap: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Country()),
+                    ),
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.settings),
+                  title: Text('Settings'),
+                  onTap: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SettingsPage()),
+                    ),
+                  },
                 ),
               ],
             ),
-          ),
-          ListTile(
-            leading: Icon(Icons.home),
-            title: Text('Home'),
-            onTap: () => {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MySSID()),
-              )
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.person),
-            title: Text('Profile'),
-            onTap: () => {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ProfilePage()),
-              ),
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.leaderboard),
-            title: Text('Leaderboard'),
-            onTap: () => {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Leaderboard()),
-              )
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.flag),
-            title: Text('Contry'),
-            onTap: () => {Navigator.of(context).pop()},
-          ),
-          ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('Settings'),
-            onTap: () => {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SettingsPage()),
-              ),
-            },
-          ),
-        ],
-      ),
+          );
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        }
+        return const CircularProgressIndicator();
+        // create some layout here
+      },
     );
   }
 }
