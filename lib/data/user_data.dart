@@ -41,6 +41,7 @@ Future<UserInfo> fetchData() async {
   }
 }
 
+/*
 Future<LeaderBoardInfo> globalFetch() async {
   final response =
       await http.get(Uri.parse('https://scoresaber.com/api/players?page=1'));
@@ -60,3 +61,4 @@ Future<LeaderBoardInfo> globalFetch() async {
     throw Exception('Failed to load');
   }
 }
+*/

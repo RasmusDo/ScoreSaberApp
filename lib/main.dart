@@ -6,10 +6,12 @@ import 'package:testing/asd.dart';
 ///import 'package:shared_preferences/shared_preferences.dart';
 //files
 import 'package:testing/leaderboard.dart';
+import 'package:testing/leaderboard_profile.dart';
 import 'package:testing/new.page.dart';
 import 'package:testing/settings.dart';
 import 'package:testing/profile.dart';
 import 'package:testing/contry.dart';
+import 'package:testing/recentsongs.dart';
 
 void main() => runApp(MyApp());
 
@@ -17,6 +19,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      routes: {
+        //PlayerPage.routeName: (ctx) => PlayerPage(),
+      },
       home: Scaffold(
         drawer: NavDrawer(),
         appBar: AppBar(
@@ -135,7 +140,8 @@ class _NavDrawerState extends State<NavDrawer> {
                   onTap: () => {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => AllCountries()),
+                      MaterialPageRoute(
+                          builder: (context) => LeaderboardPage()),
                     )
                   },
                 ),
@@ -145,7 +151,8 @@ class _NavDrawerState extends State<NavDrawer> {
                   onTap: () => {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Country()),
+                      MaterialPageRoute(
+                          builder: (context) => CountryLeaderboardPage()),
                     ),
                   },
                 ),

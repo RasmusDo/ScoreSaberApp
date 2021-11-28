@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:testing/class/user_class.dart';
+import 'package:testing/class/songscores_class.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:testing/leaderboard_profile.dart';
 
@@ -19,17 +19,17 @@ class MyHttpOverrides extends HttpOverrides {
   }
 }
 
-class CountryLeaderboardPage extends StatefulWidget {
+class Song extends StatefulWidget {
   @override
-  _CountryLeaderboardPageState createState() => _CountryLeaderboardPageState();
+  _SongState createState() => _SongState();
 }
 
-class _CountryLeaderboardPageState extends State<CountryLeaderboardPage> {
+class _SongState extends State<Song> {
   int currentPage = 1;
 
   late int totalPages;
 
-  List<Leaderboard> players = [];
+  List<SongScores> scores = [];
 
   final RefreshController refreshController =
       RefreshController(initialRefresh: true);
@@ -46,17 +46,17 @@ class _CountryLeaderboardPageState extends State<CountryLeaderboardPage> {
 
     final Uri uri = Uri.parse(
         //https://scoresaber.com/api/players?page=1
-        "https://scoresaber.com/api/players?page=$currentPage&countries=SE");
+        "https://scoresaber.com/api/player/76561198356628789/scores?limit=50&sort=recent&page=$currentPage");
 
     final response = await http.get(uri);
 
     if (response.statusCode == 200) {
-      final result = leaderboardFromJson(response.body);
+      final songScores = songScoresFromJson(response.body);
 
       if (isRefresh) {
-        players = result;
+        scores = songScores;
       } else {
-        players.addAll(result);
+        scores.addAll(songScores);
       }
 
       currentPage++;
@@ -76,22 +76,22 @@ class _CountryLeaderboardPageState extends State<CountryLeaderboardPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.pink,
-        title: Text("Country Leaderboard"),
+        title: Text('Recent scores'),
       ),
       body: SmartRefresher(
         controller: refreshController,
         enablePullUp: true,
         onRefresh: () async {
-          final result = await getLeaderboardData(isRefresh: true);
-          if (result) {
+          final songScores = await getLeaderboardData(isRefresh: true);
+          if (songScores) {
             refreshController.refreshCompleted();
           } else {
             refreshController.refreshFailed();
           }
         },
         onLoading: () async {
-          final result = await getLeaderboardData();
-          if (result) {
+          final songScores = await getLeaderboardData();
+          if (songScores) {
             refreshController.loadComplete();
           } else {
             refreshController.loadFailed();
@@ -99,34 +99,46 @@ class _CountryLeaderboardPageState extends State<CountryLeaderboardPage> {
         },
         child: ListView.separated(
           itemBuilder: (context, index) {
-            final player = players[index];
+            final song = scores[index];
 
-            return ListTile(
+            return ExpansionTile(
               leading: CircleAvatar(
-                backgroundImage: NetworkImage(player.profilePicture.toString()),
+                backgroundImage:
+                    NetworkImage(song.leaderboard.coverImage.toString()),
               ),
-              title: Text(player.name,
+              title: Text(song.leaderboard.songName,
                   style: TextStyle(fontSize: 20, color: Colors.pink)),
-              subtitle: Text(player.pp.toString() + ' pp'),
-              onTap: () {
-                String textToSend = player.id.toString();
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => PlayerPage(
-                              text: textToSend,
-                            )));
-              },
+              subtitle: Text(song.score.pp.toString() + ' pp'),
               trailing: Text(
-                player.countryRank.toString(),
+                song.leaderboard.maxScore.toString(),
                 style: TextStyle(
                   fontSize: 30,
                 ),
               ),
+              children: <Widget>[
+                Card(
+                    child: Column(
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Container(
+                          child:
+                              Text('Combo: ' + song.score.maxCombo.toString()),
+                        ),
+                        Container(
+                            child: Text(song.leaderboard.difficulty.difficulty
+                                    .toString() +
+                                ' Stars'))
+                      ],
+                    )
+                  ],
+                ))
+              ],
             );
           },
           separatorBuilder: (context, index) => Divider(),
-          itemCount: players.length,
+          itemCount: scores.length,
         ),
       ),
     );

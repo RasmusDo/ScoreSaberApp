@@ -1,3 +1,4 @@
+import 'package:testing/leaderboard_profile.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -9,8 +10,6 @@ class AllCountries extends StatefulWidget {
 class _AllCountriesState extends State<AllCountries> {
   List players = [];
   List filteredPlayers = [];
-  List rank = [];
-  List pp = [];
   bool isSearching = false;
 
   getPlayers() async {
@@ -23,7 +22,6 @@ class _AllCountriesState extends State<AllCountries> {
     getPlayers().then((data) {
       setState(() {
         players = filteredPlayers = data;
-        rank = data;
       });
     });
     super.initState();
@@ -55,7 +53,7 @@ class _AllCountriesState extends State<AllCountries> {
                       Icons.search,
                       color: Colors.white,
                     ),
-                    hintText: "Search for player Here",
+                    hintText: "Search",
                     hintStyle: TextStyle(color: Colors.white)),
               ),
         actions: <Widget>[
@@ -86,16 +84,35 @@ class _AllCountriesState extends State<AllCountries> {
                 itemCount: filteredPlayers.length,
                 itemBuilder: (BuildContext context, int index) {
                   return GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).pushNamed(PlayerPage.routeName,
+                          arguments: filteredPlayers[index]);
+                    },
                     child: Card(
                       elevation: 10,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 8),
-                        child: Text(
-                          filteredPlayers[index]['name'],
-                          style: TextStyle(fontSize: 18),
-                        ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          ListTile(
+                            leading: CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                  filteredPlayers[index]['profilePicture']
+                                      .toString()),
+                            ),
+                            title: Text(
+                                filteredPlayers[index]['name'].toString(),
+                                style: TextStyle(
+                                    fontSize: 20, color: Color(0xFFAD1457))),
+                            subtitle: Text(
+                                filteredPlayers[index]['pp'].toString() +
+                                    ' pp'),
+                            trailing:
+                                Text(filteredPlayers[index]['rank'].toString(),
+                                    style: TextStyle(
+                                      fontSize: 30,
+                                    )),
+                          ),
+                        ],
                       ),
                     ),
                   );

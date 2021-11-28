@@ -7,6 +7,7 @@ import 'package:testing/data/user_data.dart';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:testing/recentsongs.dart';
 
 void main() => runApp(const ProfilePage());
 
@@ -19,6 +20,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfileState extends State<ProfilePage> {
   late Future<UserInfo> futureData;
+
   @override
   void initState() {
     super.initState();
@@ -151,13 +153,18 @@ class _ProfileState extends State<ProfilePage> {
                               style: TextButton.styleFrom(
                                 textStyle: const TextStyle(fontSize: 20),
                               ),
-                              onPressed: () => {fetchData()},
+                              onPressed: () => {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Song()),
+                                )
+                              },
                               child: const Text('Top Scores'),
                             ),
                           ],
                         ),
                       ),
-                      buildInfoDetail(),
                     ]);
               } else if (snapshot.hasError) {
                 return Text('${snapshot.error}');
@@ -171,82 +178,4 @@ class _ProfileState extends State<ProfilePage> {
       ),
     );
   }
-}
-
-Widget buildInfoDetail() {
-  return Padding(
-    padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 10.0, bottom: 15.0),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              'map',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Montserrat',
-                  fontSize: 15.0),
-            ),
-            SizedBox(height: 7.0),
-            Row(
-              children: <Widget>[
-                Text(
-                  'hkjhjg',
-                  style: TextStyle(
-                      color: Colors.grey.shade700,
-                      fontFamily: 'Montserrat',
-                      fontSize: 11.0),
-                ),
-                SizedBox(width: 4.0),
-                Icon(
-                  Icons.timer,
-                  size: 4.0,
-                  color: Colors.black,
-                ),
-                SizedBox(width: 4.0),
-                Text(
-                  '3 pp',
-                  style: TextStyle(
-                      color: Colors.grey.shade500,
-                      fontFamily: 'Montserrat',
-                      fontSize: 11.0),
-                )
-              ],
-            )
-          ],
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            SizedBox(width: 7.0),
-            InkWell(
-              onTap: () {},
-              child: Container(
-                height: 20.0,
-                width: 20.0,
-              ),
-            ),
-            SizedBox(width: 7.0),
-            InkWell(
-              onTap: () {},
-              child: Container(
-                height: 20.0,
-                width: 20.0,
-              ),
-            ),
-            SizedBox(width: 7.0),
-            InkWell(
-              onTap: () {},
-              child: Container(
-                height: 22.0,
-                width: 22.0,
-              ),
-            )
-          ],
-        )
-      ],
-    ),
-  );
 }
