@@ -102,12 +102,14 @@ class _CountryLeaderboardPageState extends State<CountryLeaderboardPage> {
             final player = players[index];
 
             return ListTile(
+              tileColor: Colors.black87,
               leading: CircleAvatar(
                 backgroundImage: NetworkImage(player.profilePicture.toString()),
               ),
               title: Text(player.name,
                   style: TextStyle(fontSize: 20, color: Colors.pink)),
-              subtitle: Text(player.pp.toString() + ' pp'),
+              subtitle: Text(player.pp.toString() + ' pp',
+                  style: TextStyle(color: Colors.blue)),
               onTap: () {
                 String textToSend = player.id.toString();
                 Navigator.push(
@@ -120,6 +122,7 @@ class _CountryLeaderboardPageState extends State<CountryLeaderboardPage> {
               trailing: Text(
                 player.countryRank.toString(),
                 style: TextStyle(
+                  color: Colors.white,
                   fontSize: 30,
                 ),
               ),

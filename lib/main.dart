@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:testing/class/user_class.dart';
 import 'package:testing/data/user_data.dart';
 import 'package:testing/asd.dart';
@@ -88,7 +89,7 @@ class _NavDrawerState extends State<NavDrawer> {
               children: <Widget>[
                 DrawerHeader(
                   decoration: BoxDecoration(
-                    color: Colors.yellow,
+                    color: Colors.grey[800],
                   ),
                   child: Stack(
                     children: <Widget>[
@@ -102,19 +103,25 @@ class _NavDrawerState extends State<NavDrawer> {
                         ),
                       ),
                       Align(
-                          alignment: Alignment(0.5, 0),
+                          alignment: Alignment(0.4, -0.3),
                           child: Text('${snapshot.data!.playerName}',
                               style: TextStyle(
-                                  color: Colors.black, fontSize: 20.0))),
+                                  color: Colors.yellow,
+                                  fontSize: 25.0,
+                                  fontFamily: 'Quantico'))),
                       Align(
-                        alignment: Alignment(0.2, 0.4),
+                        alignment: Alignment(0.3, 0.4),
                         child: Text('PP: ${snapshot.data!.pp}',
-                            style: TextStyle(color: Colors.blue)),
+                            style: TextStyle(
+                                fontSize: 17,
+                                color: Colors.blue[600],
+                                fontFamily: 'Quantico')),
                       ),
                     ],
                   ),
                 ),
                 ListTile(
+                  selectedTileColor: Colors.black12,
                   leading: Icon(Icons.home),
                   title: Text('Home'),
                   onTap: () => {

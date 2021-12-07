@@ -22,8 +22,8 @@ Future wad() async {
 }
 
 Future<UserInfo> fetchData() async {
-  final response = await http.get(
-      Uri.parse('https://new.scoresaber.com/api/player/2085408448198355/full'));
+  final response = await http.get(Uri.parse(
+      'https://new.scoresaber.com/api/player/76561198356628789/full'));
 
   if (response.statusCode == 200) {
     return UserInfo.fromJson(jsonDecode(response.body)['playerInfo']);

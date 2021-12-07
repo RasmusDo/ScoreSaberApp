@@ -30,17 +30,18 @@ class _ProfileState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Fetch Data Example',
+      title: 'wpwp',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
         drawer: NavDrawer(),
         appBar: AppBar(
-          title: const Text('Profile'),
+          backgroundColor: Colors.redAccent,
+          title: const Text('My profile'),
         ),
         body: Container(
-          color: Colors.white,
+          color: Colors.grey[900],
           padding: EdgeInsets.all(16.0),
           child: FutureBuilder<UserInfo>(
             future: futureData,
@@ -52,8 +53,8 @@ class _ProfileState extends State<ProfilePage> {
                       Hero(
                         tag: 'LOL',
                         child: Container(
-                          height: 125.0,
-                          width: 125.0,
+                          height: 200.0,
+                          width: 250.0,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(62.5),
                               image: DecorationImage(
@@ -66,18 +67,22 @@ class _ProfileState extends State<ProfilePage> {
                       Text(
                         '${snapshot.data!.playerName}',
                         style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontSize: 20.0,
+                            color: Colors.white,
+                            fontFamily: 'Quantico',
+                            fontSize: 50.0,
                             fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(height: 4.0),
-                      Text(
-                        'PP: ${snapshot.data!.pp}',
-                        style: TextStyle(
-                            fontFamily: 'Montserrat', color: Colors.grey),
+                      SizedBox(
+                        height: 4.0,
                       ),
+                      Text('PP: ${snapshot.data!.pp}',
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontFamily: 'Quantico',
+                            color: Colors.blueAccent,
+                          )),
                       Padding(
-                        padding: EdgeInsets.all(30.0),
+                        padding: EdgeInsets.all(20.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
@@ -87,15 +92,18 @@ class _ProfileState extends State<ProfilePage> {
                                 Text(
                                   'COUNTRY',
                                   style: TextStyle(
-                                      fontFamily: 'Montserrat',
+                                      fontSize: 20,
+                                      color: Colors.red[700],
+                                      fontFamily: 'Quantico',
                                       fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(height: 5.0),
                                 Text(
                                   '${snapshot.data!.country}',
                                   style: TextStyle(
+                                      fontSize: 18,
                                       fontFamily: 'Montserrat',
-                                      color: Colors.grey),
+                                      color: Colors.white),
                                 )
                               ],
                             ),
@@ -105,15 +113,18 @@ class _ProfileState extends State<ProfilePage> {
                                 Text(
                                   'RANK',
                                   style: TextStyle(
-                                      fontFamily: 'Montserrat',
+                                      fontSize: 20,
+                                      color: Colors.red[700],
+                                      fontFamily: 'Quantico',
                                       fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(height: 5.0),
                                 Text(
                                   '${snapshot.data!.rank}',
                                   style: TextStyle(
+                                      fontSize: 18,
                                       fontFamily: 'Montserrat',
-                                      color: Colors.grey),
+                                      color: Colors.white),
                                 )
                               ],
                             ),
@@ -123,15 +134,18 @@ class _ProfileState extends State<ProfilePage> {
                                 Text(
                                   'LOCAL',
                                   style: TextStyle(
-                                      fontFamily: 'Montserrat',
+                                      fontSize: 20,
+                                      color: Colors.red[700],
+                                      fontFamily: 'Quantico',
                                       fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(height: 5.0),
                                 Text(
                                   '${snapshot.data!.countryRank}',
                                   style: TextStyle(
+                                      fontSize: 18,
                                       fontFamily: 'Montserrat',
-                                      color: Colors.grey),
+                                      color: Colors.white),
                                 )
                               ],
                             )
@@ -148,7 +162,7 @@ class _ProfileState extends State<ProfilePage> {
                                   textStyle: const TextStyle(fontSize: 20),
                                 ),
                                 onPressed: () {},
-                                child: const Text('Recent Scores')),
+                                child: const Text('Top Scores')),
                             TextButton(
                               style: TextButton.styleFrom(
                                 textStyle: const TextStyle(fontSize: 20),
@@ -160,10 +174,15 @@ class _ProfileState extends State<ProfilePage> {
                                       builder: (context) => Song()),
                                 )
                               },
-                              child: const Text('Top Scores'),
+                              child: const Text('Recent Scores'),
                             ),
                           ],
                         ),
+                      ),
+                      ListTile(
+                        leading: Text('HEHHE',
+                            style: TextStyle(
+                                fontSize: 20, backgroundColor: Colors.white)),
                       ),
                     ]);
               } else if (snapshot.hasError) {

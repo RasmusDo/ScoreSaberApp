@@ -100,6 +100,16 @@ class _SongState extends State<Song> {
         child: ListView.separated(
           itemBuilder: (context, index) {
             final song = scores[index];
+            final procent = scores[index].score.baseScore /
+                scores[index].leaderboard.maxScore;
+            var procent2 = procent * 100;
+
+            //double num = double.parse((procent2).toStringAsFixed(2));
+            if (procent2 < 99.99) {
+              var procent2 = 'ha';
+            } else {
+              var procent2 = num;
+            }
 
             return ExpansionTile(
               leading: CircleAvatar(
@@ -110,9 +120,10 @@ class _SongState extends State<Song> {
                   style: TextStyle(fontSize: 20, color: Colors.pink)),
               subtitle: Text(song.score.pp.toString() + ' pp'),
               trailing: Text(
-                song.leaderboard.maxScore.toString(),
+                procent2.toString(),
                 style: TextStyle(
-                  fontSize: 30,
+                  fontFamily: 'RobotoMono',
+                  fontSize: 20,
                 ),
               ),
               children: <Widget>[
@@ -123,13 +134,22 @@ class _SongState extends State<Song> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         Container(
+                          padding: EdgeInsets.all(18.0),
                           child:
-                              Text('Combo: ' + song.score.maxCombo.toString()),
+                              Text('Combo: ' + song.score.maxCombo.toString(),
+                                  style: TextStyle(
+                                    color: Colors.green,
+                                    fontSize: 18,
+                                  )),
                         ),
                         Container(
-                            child: Text(song.leaderboard.difficulty.difficulty
-                                    .toString() +
-                                ' Stars'))
+                          padding: EdgeInsets.all(18),
+                          child: Text(
+                            song.leaderboard.difficulty.difficulty.toString() +
+                                ' Stars',
+                            style: TextStyle(color: Colors.red, fontSize: 18),
+                          ),
+                        )
                       ],
                     )
                   ],
