@@ -1,35 +1,71 @@
 import 'dart:convert';
 
-//PERSONAL PROFILE CLASS
+UserInfo userInfoFromJson(String str) => UserInfo.fromJson(json.decode(str));
+
+String userInfoToJson(UserInfo data) => json.encode(data.toJson());
+
 class UserInfo {
-  final String playerId;
-  final String playerName;
-  final String avatar;
-  final int rank;
-  final int countryRank;
-  final num pp;
-  final String country;
+  UserInfo({
+    required this.id,
+    required this.name,
+    required this.profilePicture,
+    required this.country,
+    required this.pp,
+    required this.rank,
+    required this.countryRank,
+    required this.role,
+    required this.badges,
+    required this.histories,
+    required this.permissions,
+    required this.banned,
+    required this.inactive,
+  });
 
-  UserInfo._(
-      {required this.playerId,
-      required this.playerName,
-      required this.avatar,
-      required this.countryRank,
-      required this.rank,
-      required this.pp,
-      required this.country});
+  String id;
+  String name;
+  String profilePicture;
+  String country;
+  double pp;
+  int rank;
+  int countryRank;
+  dynamic role;
+  List<dynamic> badges;
+  String histories;
+  int permissions;
+  bool banned;
+  bool inactive;
 
-  factory UserInfo.fromJson(Map<String, dynamic> json) {
-    return new UserInfo._(
-      playerId: json['playerId'],
-      playerName: json['playerName'],
-      avatar: json['avatar'],
-      rank: json['rank'],
-      countryRank: json['countryRank'],
-      pp: json['pp'],
-      country: json['country'],
-    );
-  }
+  factory UserInfo.fromJson(Map<String, dynamic> json) => UserInfo(
+        id: json["id"],
+        name: json["name"],
+        profilePicture: json["profilePicture"],
+        country: json["country"],
+        pp: json["pp"].toDouble(),
+        rank: json["rank"],
+        countryRank: json["countryRank"],
+        role: json["role"],
+        badges: List<dynamic>.from(json["badges"].map((x) => x)),
+        histories: json["histories"],
+        permissions: json["permissions"],
+        banned: json["banned"],
+        inactive: json["inactive"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "profilePicture": profilePicture,
+        "country": country,
+        "pp": pp,
+        "rank": rank,
+        "countryRank": countryRank,
+        "role": role,
+        "badges": List<dynamic>.from(badges.map((x) => x)),
+        "histories": histories,
+        "permissions": permissions,
+        "banned": banned,
+        "inactive": inactive,
+      };
 }
 
 //GLOBAL LEADERBOARD CLASS

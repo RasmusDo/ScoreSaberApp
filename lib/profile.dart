@@ -1,12 +1,15 @@
+//flutter packages
 import 'dart:async';
-import 'package:testing/main.dart';
-
 import 'dart:convert';
-import 'package:testing/class/user_class.dart';
-import 'package:testing/data/user_data.dart';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+
+//Lib packages
+import 'package:testing/class/user_class.dart';
+import 'package:testing/data/user_data.dart';
+import 'package:testing/main.dart';
 import 'package:testing/recentsongs.dart';
 
 void main() => runApp(const ProfilePage());
@@ -19,12 +22,17 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfileState extends State<ProfilePage> {
-  late Future<UserInfo> futureData;
+  ApiCall _apiCall = new ApiCall();
 
-  @override
-  void initState() {
-    super.initState();
-    futureData = fetchData();
+  Future<void> _deleteCacheContents() async {
+    print("walla");
+    final cacheDir = await getTemporaryDirectory();
+    String fileName = "cacheData.json";
+
+    if (await File(cacheDir.path + "/" + fileName).exists()) {
+      cacheDir.delete(recursive: true);
+      print("Deleted the CacheJson file!!");
+    }
   }
 
   @override
@@ -44,7 +52,7 @@ class _ProfileState extends State<ProfilePage> {
           color: Colors.grey[900],
           padding: EdgeInsets.all(16.0),
           child: FutureBuilder<UserInfo>(
-            future: futureData,
+            future: _apiCall.getUserDataResponse(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return Column(
@@ -60,12 +68,15 @@ class _ProfileState extends State<ProfilePage> {
                               image: DecorationImage(
                                   fit: BoxFit.cover,
                                   image: NetworkImage(
-                                      'https://new.scoresaber.com${snapshot.data!.avatar}'))),
+                                      '${snapshot.data!.profilePicture}'
+                                      //'https://new.scoresaber.com${snapshot.data!.avatar}
+                                      ))),
                         ),
                       ),
                       SizedBox(height: 25.0),
                       Text(
-                        '${snapshot.data!.playerName}',
+                        '${snapshot.data!.name}',
+                        //'${snapshot.data!.playerName}',
                         style: TextStyle(
                             color: Colors.white,
                             fontFamily: 'Quantico',
@@ -161,7 +172,7 @@ class _ProfileState extends State<ProfilePage> {
                                 style: TextButton.styleFrom(
                                   textStyle: const TextStyle(fontSize: 20),
                                 ),
-                                onPressed: () {},
+                                onPressed: _deleteCacheContents,
                                 child: const Text('Top Scores')),
                             TextButton(
                               style: TextButton.styleFrom(
@@ -179,11 +190,19 @@ class _ProfileState extends State<ProfilePage> {
                           ],
                         ),
                       ),
-                      ListTile(
-                        leading: Text('HEHHE',
-                            style: TextStyle(
-                                fontSize: 20, backgroundColor: Colors.white)),
-                      ),
+                      Container(
+                          child: Stack(
+                        children: <Widget>[
+                          ListTile(
+                            leading: Text('wooo',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                )),
+                            trailing: Text('text'),
+                          ),
+                          ListTile(leading: Text('ahahah'))
+                        ],
+                      )),
                     ]);
               } else if (snapshot.hasError) {
                 return Text('${snapshot.error}');

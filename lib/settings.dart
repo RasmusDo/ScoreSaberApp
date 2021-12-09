@@ -1,9 +1,12 @@
+//flutter packages
 import 'package:flutter/material.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
+import 'dart:async';
 
-
+//lib
 import 'package:testing/main.dart';
-
 
 class SettingsPage extends StatelessWidget {
   @override
@@ -18,7 +21,7 @@ class SettingsPage extends StatelessWidget {
 class MySettingsPage extends StatefulWidget {
   const MySettingsPage({Key? key, required this.title}) : super(key: key);
   final String title;
-  
+
   @override
   _MySettingsPageState createState() => _MySettingsPageState();
 }
@@ -26,6 +29,17 @@ class MySettingsPage extends StatefulWidget {
 class _MySettingsPageState extends State<MySettingsPage> {
   bool isSwitched = false;
   @override
+  Future<void> _deleteCacheContents() async {
+    print("walla");
+    final cacheDir = await getTemporaryDirectory();
+    String fileName = "cacheData.json";
+
+    if (await File(cacheDir.path + "/" + fileName).exists()) {
+      cacheDir.delete(recursive: true);
+      print("Deleted the CacheJson file!!");
+    }
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -40,7 +54,7 @@ class _MySettingsPageState extends State<MySettingsPage> {
             tiles: [
               SettingsTile(
                 title: 'SSID',
-                subtitle: 'Scoreaber ID',
+                subtitle: 'Set SSID',
                 leading: Icon(Icons.person_search),
                 onPressed: (BuildContext context) {},
               ),
@@ -58,13 +72,14 @@ class _MySettingsPageState extends State<MySettingsPage> {
           ),
           SettingsSection(
             titlePadding: EdgeInsets.all(20),
-            title: 'Usage',
+            title: 'Settings',
             tiles: [
               SettingsTile(
-                title: 'Security',
-                subtitle: 'cache',
+                title: 'Remove Cache',
+                subtitle: '',
+                trailing: Icon(Icons.delete_forever),
                 leading: Icon(Icons.memory),
-                onPressed: (BuildContext context) {},
+                onPressed: (context) => _deleteCacheContents(),
               ),
               SettingsTile.switchTile(
                 title: 'Use Darkmode',

@@ -1,11 +1,14 @@
+//Flutter
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:flutter/rendering.dart';
+import 'dart:io';
+import 'dart:async';
+
+//lib
 import 'package:testing/class/user_class.dart';
 import 'package:testing/data/user_data.dart';
 import 'package:testing/asd.dart';
-
-///import 'package:shared_preferences/shared_preferences.dart';
-//files
 import 'package:testing/leaderboard.dart';
 import 'package:testing/leaderboard_profile.dart';
 import 'package:testing/new.page.dart';
@@ -69,18 +72,22 @@ class NavDrawer extends StatefulWidget {
 }
 
 class _NavDrawerState extends State<NavDrawer> {
-  late Future<UserInfo> futureData;
+  ApiCall _apiCall = new ApiCall();
 
-  @override
-  void initState() {
-    futureData = fetchData();
-    super.initState();
+  Future<void> _deleteCacheContents() async {
+    final cacheDir = await getTemporaryDirectory();
+    String fileName = "cacheData.json";
+
+    if (await File(cacheDir.path + "/" + fileName).exists()) {
+      cacheDir.delete(recursive: true);
+      print("Deleted the CacheJson file!!");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<UserInfo>(
-      future: futureData,
+      future: _apiCall.getUserDataResponse(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Drawer(
@@ -96,15 +103,15 @@ class _NavDrawerState extends State<NavDrawer> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: CircleAvatar(
-                          backgroundImage: NetworkImage(
-                              'https://new.scoresaber.com${snapshot.data!.avatar}'),
+                          backgroundImage:
+                              NetworkImage('${snapshot.data!.profilePicture}'),
                           backgroundColor: Colors.white,
                           radius: 50.0,
                         ),
                       ),
                       Align(
                           alignment: Alignment(0.4, -0.3),
-                          child: Text('${snapshot.data!.playerName}',
+                          child: Text('${snapshot.data!.name}',
                               style: TextStyle(
                                   color: Colors.yellow,
                                   fontSize: 25.0,
